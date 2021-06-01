@@ -5,14 +5,26 @@
             <form class="my-3">
                 <div class="form-group">
                     <div class="form-floating mb-3">
-                        <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+                        <input 
+                        v-model='valorEmail'
+                        type="email" 
+                        class="form-control" 
+                        id="floatingInput" placeholder="name@example.com">
                         <label for="floatingInput">Correo electrónico</label>
                     </div>
                     <div class="form-floating">
-                        <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
+                        <input 
+                        v-model='valorPass'
+                        type="password" 
+                        class="form-control" id="floatingPassword" placeholder="Password">
                         <label for="floatingPassword">Contraseña</label>
                     </div>
                 </div>
+                <small 
+                class="text-danger"
+                v-if='mostrarMensaje'>
+                    {{mensajeError}}
+                </small>
                 <button 
                 v-on:click.prevent='manejoClick($event)'
                 id='ingreso' 
@@ -37,10 +49,33 @@
 <script>
 export default {
     name: 'Login',
+    props: ['firebase'],
+    data: function(){
+        return{
+            valorEmail: '',
+            valorPass: '',
+            mensajeError: '',
+            mostrarMensaje: false
+        }
+    },
     methods:{
         manejoClick(evento){
             if(evento.target.id==='ingreso'){
-                this.$emit('ingresoCorrecto','ingreso')
+                if(this.valorEmail && this.valorPass !== ''){
+                    this.mensajeError=''
+                    this.mostrarMensaje=false
+                    this.firebase.auth().signInWithEmailAndPassword(this.valorEmail, this.valorPass)
+                    .then((response) => {
+                        console.log('Ingreso correcto con User: '+response.user.email)
+                        this.$emit('ingresoCorrecto',response.user.email)
+                    })
+                    .catch((error) => {
+                        console.log('Error: '+error.code+' - '+error.message);
+                    })
+                }else{
+                    this.mensajeError = 'Los campos no pueden estar vacíos'
+                    this.mostrarMensaje = true
+                }
             }
             if(evento.target.id==='registro'){
                 this.$emit('ingresoCorrecto','registro')

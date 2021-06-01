@@ -3,12 +3,15 @@
     <h1 class="text-center text-light fw-bold">Mis gastos</h1>
     <Login 
     v-if='!login'
+    v-bind:firebase='firebase'
     v-on:ingresoCorrecto='ingresoCorrecto'></Login>
   </main>
 </template>
 
 <script>
-import firebase from 'firebase'
+import firebase from 'firebase/app'
+import 'firebase/firestore'
+import 'firebase/auth'
 
 import Login from './components/Login'
 export default {
@@ -38,7 +41,7 @@ export default {
 
       firebase.initializeApp(firebaseConfig);
       this.db=firebase.firestore();
-      const settings = {timestampInSnapshots: true};
+      const settings = {timestampInSnapshots: true, merge:true};
       this.db.settings(settings);
       this.firebase=firebase;
 
@@ -53,6 +56,7 @@ export default {
           })
         })
       })
+      console.log(this.firebase)
   },
   methods:{
     ingresoCorrecto(dato){
