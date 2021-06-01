@@ -71,6 +71,13 @@ export default {
                     })
                     .catch((error) => {
                         console.log('Error: '+error.code+' - '+error.message);
+                        if(error.code==='auth/user-not-found'){
+                            this.mensajeError = 'El usuario no existe, debe registrarse'
+                            this.mostrarMensaje=true
+                        }else if(error.code==='auth/wrong-password'){
+                            this.mensajeError = 'Contraseña incorrecta'
+                            this.mostrarMensaje=true
+                        }
                     })
                 }else{
                     this.mensajeError = 'Los campos no pueden estar vacíos'
