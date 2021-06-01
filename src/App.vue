@@ -1,11 +1,41 @@
 <template>
-  <main class="container mt-5">
-    <h1 class="text-center text-light fw-bold">Mis gastos</h1>
-    <Login 
+  <div class="d-flex flex-column">
+    <main class="container mt-5">
+      <h1 class="text-center text-light fw-bold">Mis gastos</h1>
+      <Login 
+      v-if='!login'
+      v-bind:firebase='firebase'
+      v-on:ingresoCorrecto='ingresoCorrecto'></Login>
+    </main>
+    <footer 
     v-if='!login'
-    v-bind:firebase='firebase'
-    v-on:ingresoCorrecto='ingresoCorrecto'></Login>
-  </main>
+    class="container-fluid mt-5 flex-start">
+      <div class="row bg-light text-dark">
+        <div class="col-6 d-flex justify-content-around">
+          <span class="p-3">Contacto:</span>
+          <a 
+          href='https://www.facebook.com'
+          target="_blank"
+          class="p-3 text-primary"><i class="fa fa-facebook social"></i></a>
+          <a 
+          href='https://www.instagram.com'
+          target="_blank"
+          class="p-3 text-dark"><i class="fa fa-instagram social"></i></a>
+          <a 
+          href='https://www.linkedin.com/in/bryan-silva-9496261b2/'
+          target="_blank"
+          class="p-3 text-primary"><i class="fa fa-linkedin social"></i></a>
+          <a 
+          href='https://www.github.com/bryanjsilva'
+          target="_blank"
+          class="p-3 text-dark"><i class="fa fa-github social"></i></a>
+        </div>
+        <div class="col-6 text-center p-3">
+          &copy; Todos los derechos reservados
+        </div>
+      </div> 
+    </footer>
+  </div>
 </template>
 
 <script>
@@ -57,7 +87,7 @@ export default {
           })
         })
       })
-      console.log(this.firebase)
+      console.log(this.listaGastos)
   },
   methods:{
     ingresoCorrecto(dato){
@@ -76,5 +106,12 @@ export default {
   #app {
     font-family: 'Lato';
     color: #6338FC;
+  }
+  .social{
+    transition: all 0.3s;
+  }
+  .social:hover{
+    transform: scale(2);
+    transition: all 0.3s;
   }
 </style>
