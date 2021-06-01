@@ -25,6 +25,7 @@ export default {
       listaGastos: [],
       gastos: {},
       firebase: '',
+      userID: '',
       db: ''
     }
   },
@@ -60,7 +61,8 @@ export default {
   },
   methods:{
     ingresoCorrecto(dato){
-      alert(dato)
+      this.userID = dato
+      this.login = true
     }
   }
 }
