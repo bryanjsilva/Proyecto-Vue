@@ -8,7 +8,8 @@
       v-on:ingresoCorrecto='ingresoCorrecto'
       v-on:registroCorrecto='registroCorrecto'></Login>
       <ListaGastos
-      v-if='login'></ListaGastos>
+      v-if='login'
+      v-bind:listaGastos='listaGastos'></ListaGastos>
     </main>
     <footer 
     v-if='!login'

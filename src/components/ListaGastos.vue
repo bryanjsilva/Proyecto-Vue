@@ -1,6 +1,6 @@
 <template>
     <section class="row">
-        <div class="col-11 col-md-8 border rounded bg-light mx-auto my-3">
+        <div class="col-11 border rounded bg-light mx-auto my-3">
             <div class="d-flex justify-content-around m-3">
                 <h4 class="align-self-end">Agregar gasto</h4>
                 <button 
@@ -52,6 +52,47 @@
                     </div> 
                 </div>
             </form>
+            <section class="container card text-center my-3">
+                <div class="row h5 mt-3">
+                    <div class="col-4">
+                        Nombre
+                    </div>
+                    <div class="col-3">
+                        Monto
+                    </div>
+                    <div class="col-3">
+                        Tipo
+                    </div>
+                    <div class="col-2">
+                        Acción
+                    </div>
+                </div>
+                <hr>
+                <div 
+                v-for='(gasto,index) in listaGastos'
+                v-bind:key='index'
+                class="row my-3 text-center">
+                    <div class="col-4">
+                        {{gasto.nombre}}
+                    </div>
+                    <div class="col-3">
+                        {{gasto.monto}}
+                    </div>
+                    <div class="col-3">
+                        {{gasto.tipo}}
+                    </div>
+                    <div class="col-2 justify-content-around">
+                        <i 
+                        v-on:click="manejoGasto($event,gasto.id)"
+                        id='editar'
+                        class="fa fa-edit fa-fw accion text-warning m-2"></i>
+                        <i 
+                        v-on:click="manejoGasto($event,gasto.id)"
+                        id='eliminar'
+                        class="fa fa-trash fa-fw accion text-danger m-2"></i>
+                    </div>
+                </div>
+            </section>
         </div>
     </section>
 </template>
@@ -59,6 +100,7 @@
 <script>
 export default {
     name: 'ListaGastos',
+    props: ['listaGastos'],
     data: function(){
         return{
             mostrarAgregar: false,
@@ -83,6 +125,15 @@ export default {
         },
         agregarGasto(){
             alert('elpepe')
+        },
+        manejoGasto(evento,id){
+            if(evento.target.id==='eliminar'){
+                this.$emit('eliminarGasto',id)
+                alert('elpepe '+id)
+            }
+            if(evento.target.id==='editar'){
+                alert('elpepe '+id)
+            }
         }
     }
 }
@@ -101,7 +152,9 @@ export default {
     height: 14rem;
     overflow: hidden;
 }
-
+.accion{
+    transform: scale(1.5);
+}
 @media (max-width:576px) {
     .contenido.block{
         height: 20rem;
