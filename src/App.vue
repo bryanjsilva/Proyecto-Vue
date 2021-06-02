@@ -1,6 +1,12 @@
 <template>
   <div class="d-flex flex-column">
     <main class="container mt-5">
+      <div class='container d-flex'>
+        <button 
+        v-if='login'
+        v-on:click='salirApp'
+        class="btn btn-warning ms-auto">Salir</button>
+      </div>
       <h1 class="text-center text-light fw-bold">Mis gastos</h1>
       <Login 
       v-if='!login'
@@ -9,7 +15,9 @@
       v-on:registroCorrecto='registroCorrecto'></Login>
       <ListaGastos
       v-if='login'
-      v-bind:listaGastos='listaGastos'></ListaGastos>
+      v-bind:listaGastos='listaGastos'
+      v-on:eliminarGasto='eliminarGasto'
+      v-on:agregarGasto='agregarGasto'></ListaGastos>
     </main>
     <footer 
     v-if='!login'
@@ -119,6 +127,31 @@ export default {
         nombre: 'ejemplo',
         monto: 3.99,
         tipo: 'Entretenimiento'
+      })
+    },
+    eliminarGasto(dato){
+      this.listaGastos.splice(dato.indice,1)
+      this.gastos.doc(dato.id).delete()
+    },
+    agregarGasto(dato){
+      if(dato.nombre !== '' && dato.monto>0){
+        this.gastos.add(dato)
+        .then(doc=>{
+          this.listaGastos.push({id: doc.id, nombre: dato.nombre,monto: dato.monto, tipo: dato.tipo})
+        })
+        .catch(error=>{
+          console.log('No se pudo agregar el libro. Error: '+error.code+' - '+error.message)
+        })
+      }
+    },
+    salirApp(){
+      this.firebase.auth().signOut()
+      .then(()=>{
+        this.login = false
+        this.listaGastos = []
+      })
+      .catch(error=>{
+        console.log('No se ha cerrado la sesión correctamente. Error : '+error.code+' - '+error.message)
       })
     }
   }

@@ -17,7 +17,7 @@
                         <label class="form-label" for='nombreGasto'>Nombre del gasto</label>
                     </div>
                     <div class="col-12 col-md-5">
-                        <input type="text" name="nombreGasto" id="nombreGasto" class="form-control">
+                        <input type="text" name="nombreGasto" id="nombreGasto" class="form-control" v-model='nuevoGasto.nombre'>
                     </div>
                 </div>
                 <div class="row justify-content-center m-2">
@@ -25,7 +25,7 @@
                         <label class="form-label" for='montoGasto'>Monto del gasto</label>
                     </div>
                     <div class="col-12 col-md-5">
-                        <input type="number" name="montoGasto" id="montoGasto" class="form-control" min='0'>
+                        <input type="number" name="montoGasto" id="montoGasto" class="form-control" min='0' v-model='nuevoGasto.monto'>
                     </div>
                 </div>
                 <div class="row justify-content-center m-2">
@@ -33,7 +33,7 @@
                         <label class="form-label" for='tipoGasto'>Tipo del gasto</label>
                     </div>
                     <div class="col-12 col-md-5">
-                        <select name="tipoGasto" id="tipoGasto" class="form-select">
+                        <select name="tipoGasto" id="tipoGasto" class="form-select" v-model='nuevoGasto.tipo'>
                             <option  selected value="Entretenimiento">Entretenimiento</option>
                             <option value="Hogar">Hogar</option>
                             <option value="Salud">Salud</option>
@@ -45,7 +45,7 @@
                 <div class="row justify-content-center m-2">
                     <div class="col-12 col-md-4">
                         <button 
-                        v-on:click.prevent='agregarGasto'
+                        v-on:click.prevent='this.$emit("agregarGasto",nuevoGasto)'
                         class="btn btn-primary w-100">
                             Agregar
                         </button>
@@ -83,11 +83,11 @@
                     </div>
                     <div class="col-2 justify-content-around">
                         <i 
-                        v-on:click="manejoGasto($event,gasto.id)"
+                        v-on:click="this.$emit('editarGasto',{id:gasto.id, indice: index})"
                         id='editar'
                         class="fa fa-edit fa-fw accion text-warning m-2"></i>
                         <i 
-                        v-on:click="manejoGasto($event,gasto.id)"
+                        v-on:click="this.$emit('eliminarGasto',{id:gasto.id, indice: index})"
                         id='eliminar'
                         class="fa fa-trash fa-fw accion text-danger m-2"></i>
                     </div>
@@ -104,7 +104,8 @@ export default {
     data: function(){
         return{
             mostrarAgregar: false,
-            iconoAgregar: 'iconoAgregar'
+            iconoAgregar: 'iconoAgregar',
+            nuevoGasto: {nombre: '', monto: '', tipo: ''}
         }
     },
     methods:{
@@ -121,18 +122,6 @@ export default {
                 contenido.classList.remove('block')
                 contenido.classList.add('none')
                 this.iconoAgregar='iconoAgregar'
-            }
-        },
-        agregarGasto(){
-            alert('elpepe')
-        },
-        manejoGasto(evento,id){
-            if(evento.target.id==='eliminar'){
-                this.$emit('eliminarGasto',id)
-                alert('elpepe '+id)
-            }
-            if(evento.target.id==='editar'){
-                alert('elpepe '+id)
             }
         }
     }
