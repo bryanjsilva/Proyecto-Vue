@@ -76,7 +76,7 @@
                         {{gasto.nombre}}
                     </div>
                     <div class="col-3">
-                        {{gasto.monto}}
+                        ${{gasto.monto}}
                     </div>
                     <div class="col-3">
                         {{gasto.tipo}}
@@ -92,6 +92,15 @@
                         class="fa fa-trash fa-fw accion text-danger m-2"></i>
                     </div>
                 </div>
+                <div class="row bg-dark text-light h5 justify-content-center m-2 p-2 rounded">
+                    <div 
+                    class='col-5'>
+                        Total gastos:
+                    </div>
+                    <div class="col-5">
+                        ${{suma}}
+                    </div>
+                </div>
             </section>
         </div>
     </section>
@@ -105,8 +114,15 @@ export default {
         return{
             mostrarAgregar: false,
             iconoAgregar: 'iconoAgregar',
-            nuevoGasto: {nombre: '', monto: '', tipo: ''}
+            nuevoGasto: {nombre: '', monto: '', tipo: ''},
+            suma: 0
         }
+    },
+    beforeUpdate(){
+        this.suma = 0
+        this.listaGastos.forEach(gasto => {
+            this.suma += parseFloat(gasto.monto)
+        });
     },
     methods:{
         manejoClick(evento){

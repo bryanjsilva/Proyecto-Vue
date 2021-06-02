@@ -138,6 +138,8 @@ export default {
         this.gastos.add(dato)
         .then(doc=>{
           this.listaGastos.push({id: doc.id, nombre: dato.nombre,monto: dato.monto, tipo: dato.tipo})
+          dato.nombre = ''
+          dato.monto = ''
         })
         .catch(error=>{
           console.log('No se pudo agregar el libro. Error: '+error.code+' - '+error.message)
