@@ -7,12 +7,14 @@
       v-bind:firebase='firebase'
       v-on:ingresoCorrecto='ingresoCorrecto'
       v-on:registroCorrecto='registroCorrecto'></Login>
+      <ListaGastos
+      v-if='login'></ListaGastos>
     </main>
     <footer 
     v-if='!login'
     class="container-fluid mt-5 flex-start">
       <div class="row bg-light text-dark">
-        <div class="col-6 d-flex justify-content-around">
+        <div class="col-12 col-md-6 d-flex justify-content-around">
           <span class="p-3">Contacto:</span>
           <a 
           href='https://www.facebook.com'
@@ -31,7 +33,7 @@
           target="_blank"
           class="p-3 text-dark"><i class="fa fa-github social"></i></a>
         </div>
-        <div class="col-6 text-center p-3">
+        <div class="col-12 col-md-6 text-center p-3">
           &copy; Todos los derechos reservados
         </div>
       </div> 
@@ -43,12 +45,14 @@
 import firebase from 'firebase/app'
 import 'firebase/firestore'
 import 'firebase/auth'
-
 import Login from './components/Login'
+import ListaGastos from './components/ListaGastos'
+
 export default {
   name: 'App',
   components: {
-    Login
+    Login,
+    ListaGastos
   },
   data: function(){
     return{

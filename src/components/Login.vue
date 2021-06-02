@@ -51,7 +51,7 @@
             <h2 class="text-center mt-3">Registro de usuarios</h2>
             <form class='my-3 container'>
                 <div class="row">
-                    <div class="form-group col-6">
+                    <div class="form-group col-12 col-md-6">
                         <label 
                         for="nombre"
                         class="form-label">Nombre</label>
@@ -67,7 +67,7 @@
                             class="form-control">
                         </div> 
                     </div>
-                    <div class="form-group col-6">
+                    <div class="form-group col-12 col-md-6">
                         <label 
                         for="apellido"
                         class="form-label">Apellido</label>
@@ -103,7 +103,7 @@
                     </div>
                 </div>
                 <div class="row mt-2">
-                    <div class="form-group col-6">
+                    <div class="form-group col-12 col-md-6">
                         <label 
                         for="contrasena"
                         class="form-label">Contraseña</label>
@@ -119,7 +119,7 @@
                             v-bind:class='"form-control "+validPass'>
                         </div>
                     </div>
-                    <div class="form-group col-6">
+                    <div class="form-group col-12 col-md-6">
                         <label 
                         for="confirmar"
                         class="form-label">Confirmar contraseña</label>
@@ -139,16 +139,16 @@
                     v-if='mostrarError'
                     class="text-danger">{{errorRegistro}}</small>
                 </div>
-                <div class="row my-4 text-center">
-                    <div class="col-6">
+                <div class="row my-4 justify-content-center">
+                    <div class="col-12 col-md-4 mb-2">
                         <button 
                         id="registrarse"
                         v-on:click.prevent="manejoClick($event)"
-                        class="btn btn-primary">Registrarse </button>
+                        class="btn btn-primary w-100">Registrarse </button>
                     </div>
-                    <div class="col-6">
+                    <div class="col-12 col-md-4">
                         <button 
-                        class="btn btn-outline-danger"
+                        class="btn btn-outline-danger w-100"
                         v-on:click.prevent='registro=false'>Cancelar </button>
                     </div>
                 </div>
