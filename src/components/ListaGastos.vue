@@ -2,11 +2,11 @@
     <section class="row">
         <div class="col-11 border rounded bg-light mx-auto my-3">
             <div class="d-flex justify-content-around m-3">
-                <h4 class="align-self-end mt-3">Agregar gasto</h4>
+                <h4 class="align-self-end m-auto">Agregar gasto</h4>
                 <button 
                 v-bind:id='iconoAgregar'
                 v-on:click.prevent="manejoClick($event)"
-                class="btn btn-warning">
+                class="btn btn-warning m-auto">
                     <i v-show='!mostrarAgregar' id='iconoMas' class="fa fa-plus fa-fw" v-on:click.prevent="manejoClick($event)"></i>
                     <i v-show='mostrarAgregar' id='iconoMenos' class='fa fa-minus fa-fw' v-on:click.prevent="manejoClick($event)"></i>
                 </button>
@@ -158,9 +158,11 @@ export default {
                 this.gastoID={id: gasto.id, index: indice}
             }
             if(event.target.id==='botonEditar'){
-                this.editar=false
-                this.$emit('editarGasto',this.nuevoGasto,this.gastoID)
-                this.nuevoGasto = {nombre: '', monto: '', tipo: ''}
+                if(this.nuevoGasto.nombre!==''){
+                    this.editar=false
+                    this.$emit('editarGasto',this.nuevoGasto,this.gastoID)
+                    this.nuevoGasto = {nombre: '', monto: '', tipo: ''}
+                }
             }
         }
     }
