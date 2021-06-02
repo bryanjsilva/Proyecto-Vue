@@ -5,7 +5,8 @@
       <Login 
       v-if='!login'
       v-bind:firebase='firebase'
-      v-on:ingresoCorrecto='ingresoCorrecto'></Login>
+      v-on:ingresoCorrecto='ingresoCorrecto'
+      v-on:registroCorrecto='registroCorrecto'></Login>
     </main>
     <footer 
     v-if='!login'
@@ -52,11 +53,13 @@ export default {
   data: function(){
     return{
       login: false,
-      listaGastos: [],
+      listaUsuarios: [],
       gastos: {},
+      listaGastos: [],
       firebase: '',
       userID: '',
-      db: ''
+      db: '',
+      usuarios:{}
     }
   },
   beforeMount(){
@@ -76,23 +79,42 @@ export default {
       this.db.settings(settings);
       this.firebase=firebase;
 
-      this.gastos = this.db.collection('usuarios');
-      this.gastos.get().then(gastos=>{
-        gastos.forEach(gasto=>{
-          this.listaGastos.push({
-            id: gasto.id,
-            nombre: gasto.data().nombre,
-            tipo: gasto.data().tipo,
-            monto: gasto.data().monto
+      this.usuarios = this.db.collection('usuarios');
+      this.usuarios.get().then(usuarios=>{
+        usuarios.forEach(usuario=>{
+          this.listaUsuarios.push({
+            id: usuario.id,
+            nombre: usuario.data().nombre,
+            apellido: usuario.data().apellido,
+            email: usuario.data().email
           })
         })
       })
-      console.log(this.listaGastos)
+      console.log(this.listaUsuarios)
   },
   methods:{
     ingresoCorrecto(dato){
       this.userID = dato
       this.login = true
+      this.gastos=this.db.collection('usuarios').doc(this.userID).collection('libreta')
+      this.gastos.get()
+      .then(gastos=>{
+        gastos.forEach(gasto=>{
+          this.listaGastos.push({id: gasto.id, nombre:gasto.data().nombre, tipo: gasto.data().tipo, monto: gasto.data().monto})
+        })
+      })
+      .catch(error=>{
+        console.log('Error: '+error.code+' - '+error.message)
+      })
+      console.log(this.listaGastos)
+    },
+    registroCorrecto(dato){
+      this.usuarios.doc(dato.email).set(dato)
+      this.usuarios.doc(dato.email).collection('libreta').add({
+        nombre: 'ejemplo',
+        monto: 3.99,
+        tipo: 'Entretenimiento'
+      })
     }
   }
 }

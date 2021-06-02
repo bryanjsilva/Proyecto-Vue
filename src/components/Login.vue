@@ -177,7 +177,8 @@ export default {
             mostrarError: false,
             validEmail: '',
             validPass: '',
-            validConfirmar:''
+            validConfirmar:'',
+            datosUsuario: {}
         }
     },
     methods:{
@@ -221,6 +222,8 @@ export default {
                         console.log('Registro correcto')
                         this.valorEmail = response.user.email
                         this.registro=false
+                        this.datosUsuario={nombre: this.nombreRegistro, apellido: this.apellidoRegistro, email: response.user.email}
+                        this.$emit('registroCorrecto',this.datosUsuario)
                     })
                     .catch(error=>{
                         console.log('Error: '+error.code+' - '+error.message)
