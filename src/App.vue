@@ -17,6 +17,7 @@
       v-if='login'
       v-bind:listaGastos='listaGastos'
       v-on:eliminarGasto='eliminarGasto'
+      v-on:editarGasto='editarGasto'
       v-on:agregarGasto='agregarGasto'></ListaGastos>
     </main>
     <footer 
@@ -145,6 +146,21 @@ export default {
           console.log('No se pudo agregar el libro. Error: '+error.code+' - '+error.message)
         })
       }
+    },
+    editarGasto(gasto,id){
+      this.gastos.doc(id.id).update(gasto)
+      .then(()=>{
+        this.listaGastos.forEach(element => {
+          if(element.id===id.id){
+            element.nombre = gasto.nombre
+            element.tipo = gasto.tipo
+            element.monto = gasto.monto
+          }
+        });
+      })
+      .catch(error=>{
+        console.log('No se pudo actualizar el gasto. Error: '+error.code + ' - ' +error.message)
+      })
     },
     salirApp(){
       this.firebase.auth().signOut()

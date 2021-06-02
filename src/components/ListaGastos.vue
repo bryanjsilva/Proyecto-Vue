@@ -2,13 +2,13 @@
     <section class="row">
         <div class="col-11 border rounded bg-light mx-auto my-3">
             <div class="d-flex justify-content-around m-3">
-                <h4 class="align-self-end">Agregar gasto</h4>
+                <h4 class="align-self-end mt-3">Agregar gasto</h4>
                 <button 
                 v-bind:id='iconoAgregar'
                 v-on:click.prevent="manejoClick($event)"
                 class="btn btn-warning">
-                    <i v-show='!mostrarAgregar' id='iconoMas' class="fa fa-plus" v-on:click.prevent="manejoClick($event)"></i>
-                    <i v-show='mostrarAgregar' id='iconoMenos' class='fa fa-minus' v-on:click.prevent="manejoClick($event)"></i>
+                    <i v-show='!mostrarAgregar' id='iconoMas' class="fa fa-plus fa-fw" v-on:click.prevent="manejoClick($event)"></i>
+                    <i v-show='mostrarAgregar' id='iconoMenos' class='fa fa-minus fa-fw' v-on:click.prevent="manejoClick($event)"></i>
                 </button>
             </div>
             <form id='agregarGasto' class="container mt-3 mb-2 card contenido none">
@@ -45,9 +45,17 @@
                 <div class="row justify-content-center m-2">
                     <div class="col-12 col-md-4">
                         <button 
+                        v-show="!editar"
                         v-on:click.prevent='this.$emit("agregarGasto",nuevoGasto)'
                         class="btn btn-primary w-100">
                             Agregar
+                        </button>
+                        <button
+                        v-show='editar'
+                        id='botonEditar'
+                        v-on:click.prevent='manejoEdicion($event,nuevoGasto)'
+                        class="btn btn-primary w-100">
+                            Editar
                         </button>
                     </div> 
                 </div>
@@ -83,7 +91,7 @@
                     </div>
                     <div class="col-2 justify-content-around">
                         <i 
-                        v-on:click="this.$emit('editarGasto',{id:gasto.id, indice: index})"
+                        v-on:click="manejoEdicion($event,gasto,index)"
                         id='editar'
                         class="fa fa-edit fa-fw accion text-warning m-2"></i>
                         <i 
@@ -94,10 +102,10 @@
                 </div>
                 <div class="row bg-dark text-light h5 justify-content-center m-2 p-2 rounded">
                     <div 
-                    class='col-5'>
+                    class='col-5 m-auto'>
                         Total gastos:
                     </div>
-                    <div class="col-5">
+                    <div class="col-5 m-auto">
                         ${{suma}}
                     </div>
                 </div>
@@ -115,29 +123,44 @@ export default {
             mostrarAgregar: false,
             iconoAgregar: 'iconoAgregar',
             nuevoGasto: {nombre: '', monto: '', tipo: ''},
-            suma: 0
+            suma: 0,
+            editar: false,
+            gastoID: ''
         }
     },
     beforeUpdate(){
         this.suma = 0
         this.listaGastos.forEach(gasto => {
-            this.suma += parseFloat(gasto.monto)
+        this.suma += parseFloat(gasto.monto)
         });
     },
     methods:{
         manejoClick(evento){
-            if(evento.target.id==='iconoAgregar' || evento.target.id==='iconoMas'){
+            if(evento.target.id==='iconoAgregar' || evento.target.id==='iconoMas' || evento.target.id==='editar'){
                 this.iconoAgregar='iconoEliminar'
                 this.mostrarAgregar = true
                 const contenido = document.getElementById('agregarGasto')
                 contenido.classList.add('block')
                 contenido.classList.remove('none')
-            }else if(evento.target.id==='iconoEliminar' || evento.target.id==='iconoMenos'){
+            }else if(evento.target.id==='iconoEliminar' || evento.target.id==='iconoMenos' || evento.target.id==='editar'){
                 this.mostrarAgregar = false
                 const contenido = document.getElementById('agregarGasto')
                 contenido.classList.remove('block')
                 contenido.classList.add('none')
                 this.iconoAgregar='iconoAgregar'
+            }
+        },
+        manejoEdicion(evento, gasto, indice){
+            if(evento.target.id==='editar'){
+                this.manejoClick(evento)
+                this.editar=true
+                this.nuevoGasto={nombre:gasto.nombre,monto:gasto.monto,tipo:gasto.tipo}
+                this.gastoID={id: gasto.id, index: indice}
+            }
+            if(event.target.id==='botonEditar'){
+                this.editar=false
+                this.$emit('editarGasto',this.nuevoGasto,this.gastoID)
+                this.nuevoGasto = {nombre: '', monto: '', tipo: ''}
             }
         }
     }
