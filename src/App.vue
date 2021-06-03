@@ -131,8 +131,14 @@ export default {
       })
     },
     eliminarGasto(dato){
-      this.listaGastos.splice(dato.indice,1)
       this.gastos.doc(dato.id).delete()
+      .then(()=>{
+        this.listaGastos.forEach(element => {
+          if(element.id===dato.id){
+            this.listaGastos.splice(this.listaGastos.indexOf(element),1)
+          }
+        });
+      })
     },
     agregarGasto(dato){
       if(dato.nombre !== '' && dato.monto>0){

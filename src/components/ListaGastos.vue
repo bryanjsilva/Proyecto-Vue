@@ -60,6 +60,22 @@
                     </div> 
                 </div>
             </form>
+            <section class="row">
+                <div class="col-2 col-md-1">
+                    <label for="filtro" class="form-label">Filtrar: </label>
+                </div>
+                <div class="col-8 col-md-3">
+                    <select name="filtro" id="filtro" class="form-select" v-model='filtrarGastos'>
+                        <option selected value="">Todos los gastos</option>
+                        <option value="Entretenimiento">Entretenimiento</option>
+                        <option value="Hogar">Hogar</option>
+                        <option value="Salud">Salud</option>
+                        <option value="Educación">Educación</option>
+                        <option value="Otro">Otro</option>
+                    </select>
+                </div>
+
+            </section>
             <section class="container card text-center my-3">
                 <div class="row h5 mt-3">
                     <div class="col-4">
@@ -77,7 +93,7 @@
                 </div>
                 <hr>
                 <div 
-                v-for='(gasto,index) in listaGastos'
+                v-for='(gasto,index) in gastos'
                 v-bind:key='index'
                 class="row my-3 text-center">
                     <div class="col-4">
@@ -125,14 +141,30 @@ export default {
             nuevoGasto: {nombre: '', monto: '', tipo: ''},
             suma: 0,
             editar: false,
-            gastoID: ''
+            gastoID: '',
+            filtrarGastos: '',
+            gastos: []
         }
     },
     beforeUpdate(){
+        if(this.filtrarGastos===''){
+            this.gastos = this.listaGastos
+        }else{
+            this.gastos = []
+            this.listaGastos.forEach(element => {
+                if(element.tipo===this.filtrarGastos){
+                    this.gastos.push(element)
+                }    
+            });
+        }
         this.suma = 0
-        this.listaGastos.forEach(gasto => {
-        this.suma += parseFloat(gasto.monto)
+        this.gastos.forEach(gasto => {
+            this.suma += parseFloat(gasto.monto)
         });
+        this.suma = Math.round(this.suma*100)/100
+    },
+    beforeMount(){
+        this.gastos = this.listaGastos
     },
     methods:{
         manejoClick(evento){
