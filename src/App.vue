@@ -132,13 +132,11 @@ export default {
     },
     eliminarGasto(dato){
       this.gastos.doc(dato.id).delete()
-      .then(()=>{
-        this.listaGastos.forEach(element => {
+      this.listaGastos.forEach(element => {
           if(element.id===dato.id){
             this.listaGastos.splice(this.listaGastos.indexOf(element),1)
           }
         });
-      })
     },
     agregarGasto(dato){
       if(dato.nombre !== '' && dato.monto>0){
@@ -149,7 +147,7 @@ export default {
           dato.monto = ''
         })
         .catch(error=>{
-          console.log('No se pudo agregar el libro. Error: '+error.code+' - '+error.message)
+          console.log('No se pudo agregar el gasto. Error: '+error.code+' - '+error.message)
         })
       }
     },

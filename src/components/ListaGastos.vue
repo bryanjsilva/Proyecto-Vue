@@ -111,7 +111,7 @@
                         id='editar'
                         class="fa fa-edit fa-fw accion text-warning m-2"></i>
                         <i 
-                        v-on:click="this.$emit('eliminarGasto',{id:gasto.id, indice: index})"
+                        v-on:click.prevent="manejoEliminar({id:gasto.id, indice: index})"
                         id='eliminar'
                         class="fa fa-trash fa-fw accion text-danger m-2"></i>
                     </div>
@@ -146,25 +146,22 @@ export default {
             gastos: []
         }
     },
+    beforeMount(){
+        this.gastos = this.listaGastos
+    },
     beforeUpdate(){
-        if(this.filtrarGastos===''){
-            this.gastos = this.listaGastos
-        }else{
-            this.gastos = []
-            this.listaGastos.forEach(element => {
-                if(element.tipo===this.filtrarGastos){
-                    this.gastos.push(element)
-                }    
-            });
-        }
+        this.gastos = this.listaGastos.filter(gasto=>{
+            if(this.filtrarGastos===''){
+                return this.listaGastos
+            }else{
+                return gasto.tipo===this.filtrarGastos
+            }
+        })
         this.suma = 0
         this.gastos.forEach(gasto => {
             this.suma += parseFloat(gasto.monto)
         });
         this.suma = Math.round(this.suma*100)/100
-    },
-    beforeMount(){
-        this.gastos = this.listaGastos
     },
     methods:{
         manejoClick(evento){
@@ -196,6 +193,9 @@ export default {
                     this.nuevoGasto = {nombre: '', monto: '', tipo: ''}
                 }
             }
+        },
+        manejoEliminar(dato){
+            this.$emit('eliminarGasto',dato)
         }
     }
 }
