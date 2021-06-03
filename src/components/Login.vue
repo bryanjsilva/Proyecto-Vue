@@ -1,3 +1,4 @@
+/* Este componente permite al usuario ingresar a la app o en su defecto registrarse como usuario de la app */
 <template>
     <div class="row d-flex justify-content-center my-3">
         <div 
@@ -183,6 +184,7 @@ export default {
     },
     methods:{
         manejoClick(evento){
+            // Si el usuario desea ingresar, se usa el método proporcionado por firebase auth para ingresar al sistema y comprobar si el usuario existe
             if(evento.target.id==='ingreso'){
                 if(this.valorEmail && this.valorPass !== ''){
                     this.mensajeError=''
@@ -211,6 +213,7 @@ export default {
                     this.mostrarMensaje = true
                 }
             }
+            // Si el usuario debe registrarse, se crea uno nuevo en firebase auth con los datos requeridos, además se muestran mensajes de error para validar los campos
             if(evento.target.id==='registrarse'){
                 this.errorRegistro=''
                 this.validEmail=''

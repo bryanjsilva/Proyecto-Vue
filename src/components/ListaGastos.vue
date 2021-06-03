@@ -1,3 +1,4 @@
+/* Este componente maneja la lista de gastos, las funciones de agregar, editar y eliminar así como el filtro */
 <template>
     <section class="row">
         <div class="col-11 border rounded bg-light mx-auto my-3">
@@ -146,10 +147,12 @@ export default {
             gastos: []
         }
     },
+    // Antes de que se monte la lista en la pantalla se muestran todos los gastos que tiene el usuario
     beforeMount(){
         this.gastos = []
         this.gastos = this.listaGastos
     },
+    // Antes de que se actualice, ya sea al eliminar, editar, agregar un gasto o filtrar, se actualiza la lista que se mostrará en pantalla
     beforeUpdate(){
         this.gastos = []
         this.gastos = this.listaGastos.filter(gasto=>{
@@ -166,6 +169,7 @@ export default {
         this.suma = Math.round(this.suma*100)/100
     },
     methods:{
+        // Esta función permite expander o retraer el campo para agregar o editar el formulario
         manejoClick(evento){
             if(evento.target.id==='iconoAgregar' || evento.target.id==='iconoMas' || evento.target.id==='editar'){
                 this.iconoAgregar='iconoEliminar'
@@ -181,6 +185,7 @@ export default {
                 this.iconoAgregar='iconoAgregar'
             }
         },
+        // Esta función permite editar el gasto seleccionado y se envían los nuevos datos a la app principal a través de $emit
         manejoEdicion(evento, gasto, indice){
             if(evento.target.id==='editar'){
                 this.manejoClick(evento)
@@ -196,6 +201,7 @@ export default {
                 }
             }
         },
+        // Esta función envía los datos necesarios para eliminar el gasto seleccionado a través de $emit, además actualiza la lista
         manejoEliminar(dato){
             this.$emit('eliminarGasto',dato)
             this.gastos = []
@@ -212,6 +218,7 @@ export default {
 </script>
 
 <style>
+/* Las clases contenido permiten ejecutar una animación al momento de expander o retraer el campo para editar o agregar un gasto */
 .contenido{
     transition: all 0.3s ease;
 }
@@ -227,6 +234,8 @@ export default {
 .accion{
     transform: scale(1.5);
 }
+
+/* Este media query se usa para que el contenido desplegable se vea bien en pantallas móviles, aunque la lista de tareas, no es del todo responsive */
 @media (max-width:576px) {
     .contenido.block{
         height: 20rem;

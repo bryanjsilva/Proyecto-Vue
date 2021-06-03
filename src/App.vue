@@ -1,3 +1,5 @@
+/* En este archivo se integran los componentes ListaGastos y Login, además aquí se realiza la petición a firebase */
+
 <template>
   <div class="d-flex flex-column">
     <main class="container mt-5">
@@ -87,12 +89,14 @@ export default {
         measurementId: "G-VZJWRW3RWT"
       };
 
+      // Se inicializa firebase con la configuración de la variable firebaseConfig
+
       firebase.initializeApp(firebaseConfig);
       this.db=firebase.firestore();
       const settings = {timestampInSnapshots: true, merge:true};
       this.db.settings(settings);
       this.firebase=firebase;
-
+      // Se accede a la colleción usuarios y se obtienen los datos de los usuarios registrados en la app
       this.usuarios = this.db.collection('usuarios');
       this.usuarios.get().then(usuarios=>{
         usuarios.forEach(usuario=>{
@@ -107,6 +111,7 @@ export default {
       console.log(this.listaUsuarios)
   },
   methods:{
+    // Si el ingreso desde el Login es correcto, se obtiene del usuario cada uno de los gastos que ha añadido en la app para mostrarlos en la pantalla
     ingresoCorrecto(dato){
       this.userID = dato
       this.login = true
@@ -122,6 +127,7 @@ export default {
       })
       console.log(this.listaGastos)
     },
+    // Si el usuario se ha registrado correctamente, se crea una colección libreta con un gasto de ejemplo para que el usuario pueda empezar a utilizar su libreta de gastos
     registroCorrecto(dato){
       this.usuarios.doc(dato.email).set(dato)
       this.usuarios.doc(dato.email).collection('libreta').add({
@@ -130,6 +136,7 @@ export default {
         tipo: 'Otro'
       })
     },
+    // Cuando se llama a la función de eliminar gasto se elimina tanto de firestore como de la lista que maneja los gastos internamente
     eliminarGasto(dato){
       this.gastos.doc(dato.id).delete()
       this.listaGastos.forEach(element => {
@@ -138,6 +145,7 @@ export default {
           }
         });
     },
+    // Cuando se intenta agregar un gasto, no debe quedar el nombre en blanco, el nuevo gasto se añade tanto a firestore como a la lista que maneja los gastos internamente
     agregarGasto(dato){
       if(dato.nombre !== '' && dato.monto>0){
         this.gastos.add(dato)
@@ -151,6 +159,7 @@ export default {
         })
       }
     },
+    // Si se quiere editar la información de un gasto se actualiza tanto en firestore como en la lista que maneja internamente los gastos
     editarGasto(gasto,id){
       this.gastos.doc(id.id).update(gasto)
       .then(()=>{
@@ -166,6 +175,7 @@ export default {
         console.log('No se pudo actualizar el gasto. Error: '+error.code + ' - ' +error.message)
       })
     },
+    // Si el usuario desea, puede cerrar sesión desde el botón asignado
     salirApp(){
       this.firebase.auth().signOut()
       .then(()=>{
@@ -181,6 +191,7 @@ export default {
 </script>
 
 <style>
+  /* Se usa un gradiente para el fondo de la app */
   body{
     background: rgb(131,58,180);
     background: linear-gradient(90deg, rgba(131,58,180,1) 0%, rgba(252,99,69,1) 100%);
@@ -189,6 +200,7 @@ export default {
     font-family: 'Lato';
     color: #6338FC;
   }
+  /* Se añade una transición para los íconos del footer */
   .social{
     transition: all 0.3s;
   }
