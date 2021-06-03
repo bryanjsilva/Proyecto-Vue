@@ -126,8 +126,8 @@ export default {
       this.usuarios.doc(dato.email).set(dato)
       this.usuarios.doc(dato.email).collection('libreta').add({
         nombre: 'ejemplo',
-        monto: 3.99,
-        tipo: 'Entretenimiento'
+        monto: 9.99,
+        tipo: 'Otro'
       })
     },
     eliminarGasto(dato){

@@ -138,7 +138,7 @@ export default {
         return{
             mostrarAgregar: false,
             iconoAgregar: 'iconoAgregar',
-            nuevoGasto: {nombre: '', monto: '', tipo: ''},
+            nuevoGasto: {nombre: '', monto: '', tipo: 'Entretenimiento'},
             suma: 0,
             editar: false,
             gastoID: '',
@@ -147,9 +147,11 @@ export default {
         }
     },
     beforeMount(){
+        this.gastos = []
         this.gastos = this.listaGastos
     },
     beforeUpdate(){
+        this.gastos = []
         this.gastos = this.listaGastos.filter(gasto=>{
             if(this.filtrarGastos===''){
                 return this.listaGastos
@@ -190,12 +192,20 @@ export default {
                 if(this.nuevoGasto.nombre!==''){
                     this.editar=false
                     this.$emit('editarGasto',this.nuevoGasto,this.gastoID)
-                    this.nuevoGasto = {nombre: '', monto: '', tipo: ''}
+                    this.nuevoGasto = {nombre: '', monto: '', tipo: 'Entretenimiento'}
                 }
             }
         },
         manejoEliminar(dato){
             this.$emit('eliminarGasto',dato)
+            this.gastos = []
+            this.gastos = this.listaGastos.filter(gasto=>{
+            if(this.filtrarGastos===''){
+                return this.listaGastos
+            }else{
+                return gasto.tipo===this.filtrarGastos
+            }
+        })
         }
     }
 }
